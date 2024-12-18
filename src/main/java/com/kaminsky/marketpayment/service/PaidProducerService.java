@@ -1,20 +1,22 @@
 package com.kaminsky.marketpayment.service;
 
-import com.kaminsky.marketpayment.entity.PayedOrder;
+import com.kaminsky.entity.MarketOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaidProducerService {
-    private final KafkaTemplate<String, PayedOrder> kafkaTemplate;
+    private final KafkaTemplate<String, MarketOrder> kafkaTemplate;
 
     @Autowired
-    public PaidProducerService(KafkaTemplate<String, PayedOrder> kafkaTemplate) {
+    public PaidProducerService(KafkaTemplate<String, MarketOrder> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String topic, PayedOrder order)
+    @Async
+    public void sendMessage(String topic, MarketOrder order)
     {
         kafkaTemplate.send(topic, order);
     }
